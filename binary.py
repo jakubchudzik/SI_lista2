@@ -1,5 +1,4 @@
 import numpy as np
-
 def is_different(_matrix, coords):
     pom = _matrix.T
     if '' in _matrix[coords[1]]:
@@ -67,12 +66,6 @@ def isOkColNumbers(_matrix, limit_numbers, field,coords):
     return True
 
 
-def areDifRows(_matrix):
-    for i in range(len(_matrix)):
-        for j in range(i + 1, len(_matrix)):
-            if np.array_equal(_matrix[i], _matrix[j]):
-                return False
-
 def make_grid(file_name):
     with open(file_name, 'r') as file:
         binary = file.readlines()
@@ -98,7 +91,10 @@ def find_free_place(_matrix):
                 return (i, j)
     return False
 
+
 def rec_met(_matrix, coords,field):
+    global p
+    p+=1
     limit_numbers = len(_matrix) // 2
     for i in field:
         _matrix[coords[0]][coords[1]] = i
@@ -116,13 +112,17 @@ def main():
 
     field1 = ['0', '1']
 
+    print('Binary 6x6')
+    _matrix = make_grid("data/binary_6x6")
+    rec_met(_matrix,find_free_place(_matrix),field1)
+    print('------------------------')
+    print('Binary 8x8')
+    _matrix = make_grid("data/binary_8x8")
+    rec_met(_matrix, find_free_place(_matrix), field1)
+    print('------------------------')
+    print('Binary 10x10')
     _matrix = make_grid("data/binary_10x10")
-
-    coords = find_free_place(_matrix)
-
-    rec_met(_matrix,coords,field1)
-
-
+    rec_met(_matrix, find_free_place(_matrix), field1)
 
 main()
 
