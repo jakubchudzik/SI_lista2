@@ -40,29 +40,30 @@ def is_less_than_3_char(_matrix, coords, field):
         if maxi_row > 2 or maxi_col > 2 or count_of_elements_row > 2 or count_of_elements_col > 2:
             return False
     return True
+#(col,row)
 
-
-def isOkRowNumbers(_matrix, limit_numbers, field):
+def isOkRowNumbers(_matrix, limit_numbers, field,coords):
+    row = coords[1]
     for i in field:
-        for j in _matrix:
-            temp_count = 0
-            for k in j:
-                if i == k:
-                    temp_count += 1
-            if temp_count > limit_numbers:
-                return False
+        counter = 0
+        for j in range(len(_matrix)):
+            if i == _matrix[row][j]:
+                counter+=1
+        if counter>limit_numbers:
+            return False
     return True
 
 
-def isOkColNumbers(_matrix, limit_numbers, field):
+def isOkColNumbers(_matrix, limit_numbers, field,coords):
+    col = coords[0]
+    pom = _matrix.T
     for i in field:
+        counter = 0
         for j in range(len(_matrix)):
-            temp_count = 0
-            for k in range(len(_matrix)):
-                if i == _matrix[k][j]:
-                    temp_count += 1
-            if temp_count > limit_numbers:
-                return False
+            if i == pom[col][j]:
+                counter+=1
+        if counter>limit_numbers:
+            return False
     return True
 
 
@@ -72,14 +73,11 @@ def areDifRows(_matrix):
             if np.array_equal(_matrix[i], _matrix[j]):
                 return False
 
-
-def main():
-    with open("data/text_6x6", 'r') as file:
+def make_grid(file_name):
+    with open(file_name, 'r') as file:
         binary = file.readlines()
 
     lista = []
-
-    field1 = ['0', '1']
 
     for i in range(len(binary)):
         binary[i] = binary[i].strip()
@@ -91,17 +89,39 @@ def main():
                 pom.append(j)
         lista.append(pom)
     _matrix = np.array(lista)
-
-    stack = []
+    return  _matrix
+def find_free_place(_matrix):
     coords = None
     for i in range(len(_matrix)):
         for j in range(len(_matrix[i])):
             if _matrix[i][j] == '':
-                coords = (i, j)
+                return (i, j)
+    return False
 
+def rec_met(_matrix, coords,field):
     limit_numbers = len(_matrix) // 2
-    print(_matrix)
-    print(is_different(_matrix, (0, 0)))
+    for i in field:
+        _matrix[coords[0]][coords[1]] = i
+        if is_less_than_3_char(_matrix, (coords[1], coords[0]), field) and is_different(_matrix, (coords[1], coords[0])) and isOkRowNumbers(_matrix, limit_numbers, field, (coords[1], coords[0])) and isOkColNumbers(_matrix, limit_numbers, field, (coords[1], coords[0])):
+            free = find_free_place(_matrix)
+            if free == False:
+                print(_matrix)
+            else:
+                rec_met(_matrix,free,field)
+    _matrix[coords[0]][coords[1]]=''
+
+
+
+def main():
+
+    field1 = ['0', '1']
+
+    _matrix = make_grid("data/binary_10x10")
+
+    coords = find_free_place(_matrix)
+
+    rec_met(_matrix,coords,field1)
+
 
 
 main()
