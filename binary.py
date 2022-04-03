@@ -93,8 +93,6 @@ def find_free_place(_matrix):
 
 
 def rec_met(_matrix, coords,field):
-    global p
-    p+=1
     limit_numbers = len(_matrix) // 2
     for i in field:
         _matrix[coords[0]][coords[1]] = i

@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 
 def make_grid(file_name):
@@ -22,10 +24,6 @@ def make_grid(file_name):
     _matrix = np.array(lista)
     return  _matrix
 
-
-def rec_futo(_matrix,field,coords):
-    pass
-
 def make_field(_matrix):
     field = []
     for i in range(len(_matrix)//2+1):
@@ -33,16 +31,80 @@ def make_field(_matrix):
     return field
 
 def find_free_place(_matrix):
-    coords = None
     for i in range(0,len(_matrix),2):
         for j in range(0,len(_matrix[i]),2):
             if _matrix[i][j] == '':
                 return (i, j)
     return False
 
+def is_ok_row(_matrix,field,coords):
+    liczniki={}
+    for i in range(0,len(_matrix),2):
+        if _matrix[coords[1]][i] in field:
+            if _matrix[coords[1]][i] not in liczniki:
+                liczniki[_matrix[coords[1]][i]] = 1
+            else:
+                return False
+    return True
+
+def is_ok_col(_matrix,field,coords):
+    liczniki = {}
+    for i in range(0,len(_matrix),2):
+        if _matrix[i][coords[0]] in field:
+            if _matrix[i][coords[0]] not in liczniki:
+                liczniki[_matrix[i][coords[0]]] = 1
+            else:
+                return False
+    return True
+
+def is_ok(a,b,character):
+    if a=='' or b == '':
+        return True
+    if character == ">":
+        if int(a)>int(b):
+            return True
+        else:
+            return False
+    if character == "<":
+        if int(a)<int(b):
+            return True
+        else:
+            return False
+    return True
+def is_ok_with_sanctions(_matrix,coords):
+    row = coords[1]
+    col = coords[0]
+    pom = []
+    for i in range(len(_matrix)):
+        pom.append(_matrix[row][i])
+    k=0
+    for i in range(len(pom)//2):
+       if not is_ok(pom[k],pom[k+2],pom[k+1]):
+           return False
+       k+=2
+    pom=[]
+    for i in range(len(_matrix)):
+        pom.append(_matrix[i][col])
+    k = 0
+    for i in range(len(pom) // 2):
+        if not is_ok(pom[k], pom[k + 2], pom[k + 1]):
+            return False
+        k += 2
+    return True
+
+def rec_futo(_matrix,field,coords):
+    for i in field:
+        _matrix[coords[0]][coords[1]] = i
+        if is_ok_row(_matrix,field,coords) and is_ok_col(_matrix,field,coords) and is_ok_with_sanctions(_matrix,coords):
+            free = find_free_place(_matrix)
+            if free == False:
+                print(_matrix)
+            else:
+                rec_futo(_matrix,field,find_free_place(_matrix))
+    _matrix[coords[0]][coords[1]] = ''
+
 
 def main():
     _matrix = make_grid("data/futoshiki_4x4")
-    #rec_futo(_matrix,make_field(_matrix),)
-    print(find_free_place(_matrix))
+    rec_futo(_matrix,make_field(_matrix),find_free_place(_matrix))
 main()
