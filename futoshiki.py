@@ -1,7 +1,7 @@
 import copy
 
 import numpy as np
-
+p = 0
 def make_grid(file_name):
     with open(file_name, 'r') as file:
         binary = file.readlines()
@@ -34,7 +34,7 @@ def find_free_place(_matrix):
     for i in range(0,len(_matrix),2):
         for j in range(0,len(_matrix[i]),2):
             if _matrix[i][j] == '':
-                return (i, j)
+                return (j,i)
     return False
 
 def is_ok_row(_matrix,field,coords):
@@ -93,18 +93,24 @@ def is_ok_with_sanctions(_matrix,coords):
     return True
 
 def rec_futo(_matrix,field,coords):
+    global p
     for i in field:
-        _matrix[coords[0]][coords[1]] = i
+        _matrix[coords[1]][coords[0]] = i
         if is_ok_row(_matrix,field,coords) and is_ok_col(_matrix,field,coords) and is_ok_with_sanctions(_matrix,coords):
             free = find_free_place(_matrix)
             if free == False:
+                p+=1
                 print(_matrix)
+                print()
             else:
                 rec_futo(_matrix,field,find_free_place(_matrix))
-    _matrix[coords[0]][coords[1]] = ''
+    _matrix[coords[1]][coords[0]] = ''
 
 
 def main():
-    _matrix = make_grid("data/futoshiki_4x4")
+    _matrix = make_grid("data/futoshiki_6x6")
     rec_futo(_matrix,make_field(_matrix),find_free_place(_matrix))
+    # print(is_ok_with_sanctions(_matrix,(0,4)))
+    print("Wynik: ")
+    print(p)
 main()
