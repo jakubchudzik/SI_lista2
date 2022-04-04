@@ -1,4 +1,5 @@
 import copy
+import time
 
 import numpy as np
 p = 0
@@ -100,6 +101,7 @@ def rec_futo(_matrix,field,coords):
             free = find_free_place(_matrix)
             if free == False:
                 p+=1
+                print(p)
                 print(_matrix)
                 print()
             else:
@@ -108,9 +110,11 @@ def rec_futo(_matrix,field,coords):
 
 
 def main():
+    t1 = time.time()
     _matrix = make_grid("data/futoshiki_6x6")
     rec_futo(_matrix,make_field(_matrix),find_free_place(_matrix))
     # print(is_ok_with_sanctions(_matrix,(0,4)))
     print("Wynik: ")
     print(p)
+    print(time.time()-t1)
 main()
