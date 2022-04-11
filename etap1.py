@@ -1,4 +1,5 @@
 import numpy as np
+licznik =0
 def b_is_different(_matrix, coords):
     pom = _matrix.T
     if '' in _matrix[coords[1]]:
@@ -190,6 +191,8 @@ def futo(_matrix,field,coords):
     return False
 
 def solver(_matrix,field,function,coords=None):
+    global licznik
+    licznik+=1
     if coords == None:
         coords = find_free_place(_matrix)
     for i in field:
@@ -203,18 +206,24 @@ def solver(_matrix,field,function,coords=None):
     _matrix[coords[1]][coords[0]]=''
 
 def main():
+    global licznik
     field1 = ['0', '1']
     print('Binary 6x6')
     _matrix = b_make_grid("data/binary_6x6")
     solver(_matrix,field1,binary)
+    print(licznik)
+    licznik = 0
     print('------------------------')
     print('Binary 8x8')
     _matrix = b_make_grid("data/binary_8x8")
     solver(_matrix,field1,binary)
+    print(licznik)
+    licznik=0
     print('------------------------')
     print('Binary 10x10')
     _matrix = b_make_grid("data/binary_10x10")
     solver(_matrix,field1,binary)
+    print(licznik)
     print('------------------------')
     _matrix = f_make_grid("data/futoshiki_4x4")
     solver(_matrix,f_make_field(_matrix),futo)

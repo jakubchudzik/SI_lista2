@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 def b_is_different(_matrix, coords):
     pom = _matrix.T
