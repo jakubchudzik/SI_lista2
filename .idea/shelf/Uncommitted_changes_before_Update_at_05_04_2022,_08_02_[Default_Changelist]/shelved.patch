@@ -1,0 +1,28 @@
+Index: futoshiki.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import copy\n\nimport numpy as np\n\ndef make_grid(file_name):\n    with open(file_name, 'r') as file:\n        binary = file.readlines()\n\n    lista = []\n\n    for i in range(len(binary)):\n        binary[i] = binary[i].strip()\n        pom = []\n        for j in binary[i]:\n            if j == \"x\":\n                pom.append('')\n            else:\n                pom.append(j)\n            if i % 2 ==1:\n                pom.append('')\n        if i%2==1:\n            pom.pop()\n        lista.append(np.array(pom))\n    _matrix = np.array(lista)\n    return  _matrix\n\ndef make_field(_matrix):\n    field = []\n    for i in range(len(_matrix)//2+1):\n        field.append(f'{i+1}')\n    return field\n\ndef find_free_place(_matrix):\n    for i in range(0,len(_matrix),2):\n        for j in range(0,len(_matrix[i]),2):\n            if _matrix[i][j] == '':\n                return (i, j)\n    return False\n\ndef is_ok_row(_matrix,field,coords):\n    liczniki={}\n    for i in range(0,len(_matrix),2):\n        if _matrix[coords[1]][i] in field:\n            if _matrix[coords[1]][i] not in liczniki:\n                liczniki[_matrix[coords[1]][i]] = 1\n            else:\n                return False\n    return True\n\ndef is_ok_col(_matrix,field,coords):\n    liczniki = {}\n    for i in range(0,len(_matrix),2):\n        if _matrix[i][coords[0]] in field:\n            if _matrix[i][coords[0]] not in liczniki:\n                liczniki[_matrix[i][coords[0]]] = 1\n            else:\n                return False\n    return True\n\ndef is_ok(a,b,character):\n    if a=='' or b == '':\n        return True\n    if character == \">\":\n        if int(a)>int(b):\n            return True\n        else:\n            return False\n    if character == \"<\":\n        if int(a)<int(b):\n            return True\n        else:\n            return False\n    return True\ndef is_ok_with_sanctions(_matrix,coords):\n    row = coords[1]\n    col = coords[0]\n    pom = []\n    for i in range(len(_matrix)):\n        pom.append(_matrix[row][i])\n    k=0\n    for i in range(len(pom)//2):\n       if not is_ok(pom[k],pom[k+2],pom[k+1]):\n           return False\n       k+=2\n    pom=[]\n    for i in range(len(_matrix)):\n        pom.append(_matrix[i][col])\n    k = 0\n    for i in range(len(pom) // 2):\n        if not is_ok(pom[k], pom[k + 2], pom[k + 1]):\n            return False\n        k += 2\n    return True\n\ndef rec_futo(_matrix,field,coords):\n    for i in field:\n        _matrix[coords[0]][coords[1]] = i\n        if is_ok_row(_matrix,field,coords) and is_ok_col(_matrix,field,coords) and is_ok_with_sanctions(_matrix,coords):\n            free = find_free_place(_matrix)\n            if free == False:\n                print(_matrix)\n            else:\n                rec_futo(_matrix,field,find_free_place(_matrix))\n    _matrix[coords[0]][coords[1]] = ''\n\n\ndef main():\n    _matrix = make_grid(\"data/futoshiki_4x4\")\n    rec_futo(_matrix,make_field(_matrix),find_free_place(_matrix))\nmain()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/futoshiki.py b/futoshiki.py
+--- a/futoshiki.py	
++++ b/futoshiki.py	
+@@ -1,3 +1,4 @@
++
+ import copy
+ 
+ import numpy as np
+@@ -79,9 +80,9 @@
+         pom.append(_matrix[row][i])
+     k=0
+     for i in range(len(pom)//2):
+-       if not is_ok(pom[k],pom[k+2],pom[k+1]):
+-           return False
+-       k+=2
++        if not is_ok(pom[k],pom[k+2],pom[k+1]):
++            return False
++        k+=2
+     pom=[]
+     for i in range(len(_matrix)):
+         pom.append(_matrix[i][col])

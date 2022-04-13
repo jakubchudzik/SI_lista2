@@ -167,9 +167,9 @@ def f_is_ok_with_sanctions(_matrix,coords):
         pom.append(_matrix[row][i])
     k=0
     for i in range(len(pom)//2):
-       if not f_is_ok(pom[k],pom[k+2],pom[k+1]):
-           return False
-       k+=2
+        if not f_is_ok(pom[k],pom[k+2],pom[k+1]):
+            return False
+        k+=2
     pom=[]
     for i in range(len(_matrix)):
         pom.append(_matrix[i][col])
@@ -198,56 +198,75 @@ def futo(_matrix,field,coords):
 def solver(_matrix,field,function,coords=None):
     global licznik
     global nawroty
-    n_field=['1','0']
+    global ti
+    n_field=field
     licznik+=1
     if coords == None:
         coords = find_free_place(_matrix)
-    n_field=field
-    if random.randint(0,1) ==1:
+    if random.randint(0,1)==1:
         n_field=field[::-1]
+
     for i in n_field:
         _matrix[coords[1]][coords[0]] = i
         if function(_matrix,field,coords):
             free = find_free_place(_matrix)
             if free == False:
                 print(_matrix)
-                print(licznik)
+                print("liczba wezlow dla pierwszego: "+str(licznik))
+                print("czas dla pierwszego"+str(time.time()-ti))
 
             else:
                 solver(_matrix,field,function,free)
-        else:
+        elif i==field[-1]:
             nawroty+=1
 
     _matrix[coords[1]][coords[0]]=''
 
 def main():
     global licznik
+    global nawroty
+    nawroty =0
     field1 = ['0', '1']
-    # print('Binary 6x6')
-    # _matrix = b_make_grid("data/binary_6x6")
-    # solver(_matrix,field1,binary)
-    # print(licznik)
+    print('Binary 6x6')
+    ti = time.time()
+    _matrix = b_make_grid("data/binary_6x6")
+    solver(_matrix,field1,binary)
+    print("liczba wezlow: "+str(licznik))
+    print("czas dla calosci: "+str(time.time()-ti))
+    print("liczba nawrotow: "+str(nawroty))
     # licznik = 0
+    # nawroty = 0
     # print('------------------------')
     # print('Binary 8x8')
+    # ti = time.time()
     # _matrix = b_make_grid("data/binary_8x8")
     # solver(_matrix,field1,binary)
-    # print(licznik)
+    # print("liczba wezlow: "+str(licznik))
+    # print("czas dla calosci: "+str(time.time()-ti))
+    # print("liczba nawrotow: "+str(nawroty))
     # licznik=0
+    # nawroty = 0
     # print('------------------------')
     # print('Binary 10x10')
+    # ti = time.time()
     # _matrix = b_make_grid("data/binary_10x10")
     # solver(_matrix,field1,binary)
     # print(licznik)
     # licznik=0
+    # nawroty = 0
     # print('------------------------')
+    # ti = time.time()
     # _matrix = f_make_grid("data/futoshiki_4x4")
     # solver(_matrix,f_make_field(_matrix),futo)
-    # print(licznik)
-    licznik=0
-    _matrix = f_make_grid("data/futoshiki_5x5")
-    solver(_matrix, f_make_field(_matrix), futo)
-    print(licznik)
-    print(time.time()-ti)
-    print(nawroty)
+    # print("liczba wezlow: "+str(licznik))
+    # print("czas dla calosci: "+str(time.time()-ti))
+    # print("liczba nawrotow: "+str(nawroty))
+    # licznik=0
+    # nawroty =0
+    # ti = time.time()
+    # _matrix = f_make_grid("data/futoshiki_5x5")
+    # solver(_matrix, f_make_field(_matrix), futo)
+    # print("liczba wezlow: "+str(licznik))
+    # print("czas dla calosci: "+str(time.time()-ti))
+    # print("liczba nawrotow: "+str(nawroty))
 main()
