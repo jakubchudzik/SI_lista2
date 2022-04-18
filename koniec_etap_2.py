@@ -2,12 +2,12 @@
 import time
 
 import copy
-
-licznik =0
-nawroty = 0
-
-t1 = time.time()
-t2 = 0
+#
+# licznik =0
+# nawroty = 0
+#
+# t1 = time.time()
+# t2 = 0
 
 def b_make_grid(file_name):
     with open(file_name, 'r') as file:
@@ -345,4 +345,4 @@ def test2():
     t2=time.time()-t1
     print(t2)
 
-test2()
+print("hej")

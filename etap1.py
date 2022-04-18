@@ -212,40 +212,52 @@ def solver(_matrix,field,function,coords=None):
             if free == False:
                 print(_matrix)
                 print(licznik)
+                print("czas dla pierwszego: "+str(time.time()-ti))
 
             else:
                 solver(_matrix,field,function,free)
-        else:
+        elif i == n_field[-1]:
             nawroty+=1
 
     _matrix[coords[1]][coords[0]]=''
 
 def main():
     global licznik
+    global nawroty
     field1 = ['0', '1']
-    # print('Binary 6x6')
-    # _matrix = b_make_grid("data/binary_6x6")
-    # solver(_matrix,field1,binary)
-    # print(licznik)
-    # licznik = 0
-    # print('------------------------')
-    # print('Binary 8x8')
-    # _matrix = b_make_grid("data/binary_8x8")
-    # solver(_matrix,field1,binary)
-    # print(licznik)
-    # licznik=0
-    # print('------------------------')
-    # print('Binary 10x10')
-    # _matrix = b_make_grid("data/binary_10x10")
-    # solver(_matrix,field1,binary)
-    # print(licznik)
-    # licznik=0
-    # print('------------------------')
-    # _matrix = f_make_grid("data/futoshiki_4x4")
-    # solver(_matrix,f_make_field(_matrix),futo)
-    # print(licznik)
+    print('Binary 6x6')
+    _matrix = b_make_grid("data/binary_6x6")
+    solver(_matrix,field1,binary)
+    print(licznik)
+    licznik = 0
+    print('------------------------')
+    print('Binary 8x8')
+    _matrix = b_make_grid("data/binary_8x8")
+    solver(_matrix,field1,binary)
+    print(licznik)
+    print(nawroty)
+    print("czas dla wszystkich: "+str(time.time()-ti))
+
     licznik=0
+    print('------------------------')
+    print('Binary 10x10')
+    _matrix = b_make_grid("data/binary_10x10")
+    solver(_matrix,field1,binary)
+    print(licznik)
+    licznik=0
+    print('------------------------')
+    _matrix = f_make_grid("data/futoshiki_4x4")
+    solver(_matrix,f_make_field(_matrix),futo)
+    print(licznik)
+    print(nawroty)
+    print("czas dla wszystkich: "+str(time.time()-ti))
+    print('------------------------')
     _matrix = f_make_grid("data/futoshiki_5x5")
+    solver(_matrix,f_make_field(_matrix),futo)
+    print(licznik)
+    print(nawroty)
+    print("czas dla wszystkich: "+str(time.time()-ti))
+    _matrix = f_make_grid("data/futoshiki_6x6")
     solver(_matrix, f_make_field(_matrix), futo)
     print(licznik)
     print(time.time()-ti)
